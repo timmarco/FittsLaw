@@ -1,0 +1,413 @@
+<!doctype html>
+<html>
+  <head>
+    <title>A Deep Dive Into Fitts' Law - Tim Marco</title>
+    <meta charset="UTF-8" />
+    <script src="bower_components/d3/d3.min.js"></script>
+    <script src="js/dist/minified/fitts.js"></script>
+    <script src="js/dist/minified/explorables.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600" rel="stylesheet">
+
+    <link href="styles/style.css" rel="stylesheet" />
+
+
+
+  </head>
+
+
+  <body>
+
+
+    <div id="sections" style="width:50%; left:0; margin-left:0; z-index:10">
+      <div class="step" id="fittsStepIntro" data-scroll-step="fittsStepIntro">
+        <h1>Diving Deep Into Fitts' Law</h1>
+        <h2>An Explorable Explanation by <a href="http://timmarco.github.io">Tim Marco</a></h2>
+        <div class="sectionBody">
+          <p>If you spend any time learning about ergonomics, human-computer interaction, or user experience design, you'll probably come across the concept of <strong>Fitts' Law</strong>.</p>
+          <p>Although it isn't really a <em>law</em> of the type you might see in physics or math, Fitts' Law is an empircally-verified, predictive equation. In its most simplistic form, it says something like:</p>
+          <blockquote>It's easier to point at things that are big and close to you than things that are small and far away.</blockquote>
+          <p>That probably sounds.... pretty obvious, right? Even if you had never heard of Fitts' Law, you probably could have guessed that.</p>
+          <p>But like a lot of important findings in science&mdash;and especially in psychology&mdash;there's a lot of important nuance hiding behind the common sense.</p>
+          <p>And that nuance is really important, because a deeper understanding of Fitts' Law is at the heart of why some things are easy to use (and others aren't). What matters here is that the Law isn't <em>really</em> that simple statement; it's a <strong>mathematical model</strong> that describes just <em>how hard</em> it is to point at something, given its Distance and Width.</p>
+          <p>Specifically, it's this:</p>
+          <div id="fittsEquation"></div>
+          <p>If you can grasp all of the complexities and nuances contained in that formula, congrats! You're a human computer who doesn't need to read any further.</p>
+          <p>But if you're anything like most people, the equation alone probably isn't very illuminating. And you'll probably want to continue reading.</p>
+        </div>
+
+      </div>
+
+      <div class="step" id="fittsStepIndexOfDifficulty" data-scroll-step="fittsStepIndexOfDifficulty">
+        <h3 class="fittsHeading" data-color="indexOfDifficulty">Index of Difficulty</h3>
+        <div class="sectionBody">
+          <p>The first thing to note about Fitts' Law is that it is an equation that calculates something called the <span class="fittsColorCoded" data-color="indexOfDifficulty">Index of Difficulty</span>.</p>
+          <div id="fittsEquationIndexOfDifficulty"></div>
+          <p>This is a <strong>unitless number</strong> that is used to describe how <em>difficult</em> it is for users to point at <em>something</em>. Because it has no units, it can be a little tricky to develop an intuition for what it really represents. For now, just know that this number is always more than zero, and that <strong>higher numbers mean that a particular task is more difficult</strong>.</p>
+          <p>You may be wondering what, exactly, could be <em>difficult</em> about pressing a button. It's there, and you just need to move to it, right? In this context, 'difficult' doesn't necessarily mean <em>hard</em>. It's <em>relative</em>. If something is harder to point to, users might need to take a little more time to get there. Or they may be just a little bit more likely to overshoot where they're going, and have to correct themselves.</p>
+          <p>As you'll see later, the <span class="fittsColorCoded" data-color="indexOfDifficulty">Index of Difficulty</span> winds up being really important for two reasons:</p>
+          <ul>
+            <li>First, it allows you to objectively compare the <em>relative</em> difficulty of pointing to things under different circumstances</li>
+            <li>And second, researchers can use it to actually predict the amount of <em>time</em> that it will take a typical user to complete some pointing action.</li>
+          </ul>
+          <p>But before we get there, it's important to get a little more precise about what the Index of Difficulty actually measures.</p>
+        </div>
+      </div>
+
+      <div class="step" id="fittsStepEmailIntro" data-scroll-step="fittsStepEmailIntro">
+        <div class="sectionBody">
+          <p>To get a little more concrete with this idea, think about using an email application, like the one on the right. This isn't a real email app, but hopefully the general concept is familiar enough.</p>
+          <p>Imagine that you're using this app, and you're ready to send an email. </p>
+        </div>
+      </div>
+
+
+      <div class="step" data-scroll-step="fittsStepPointingAction" id="fittsStepPointingAction">
+        <h3 class="fittsHeading" data-color="pointer">Pointing Action</h3>
+        <div class="sectionBody">
+          <p>If you're using a computer with a cursor and a mouse, you'd want to navigate to the 'Send' button.</p>
+          <p>This is what's called the <span class="fittsColorCoded" data-color="pointer">pointing action</span> or, more technically, <strong>target acquisition</strong>. Fitts' Law will help us how <em>difficult</em> this process will be in <em>relative terms</em></p>
+          <p>It's important to remember that the pointing action depends on the <span class="fittsColorCoded" data-color="pointer">initial pointer position</span> of the cursor. </p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepTargets" id="fittsStepTargets">
+        <h3 class="fittsHeading" data-color="target" style="color:black">Targets</h3>
+        <div class="sectionBody">
+          <p>If you want to send out the email, you'll need to move the cursor over the 'Send' button.</p>
+          <p>In the terms of Fitts' Law, the area where the user needs to move the cursor is referred to as the <span class="fittsColorCoded" data-color="target">Target</span>.</p>
+          <p>In this particular example, the Target is a button with a clear boundary. But that doesn't always have to be the case. </p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepMultipleTargets" id="fittsStepMultipleTargets">
+        <div class="sectionBody">
+          <p>If you wanted to do something <em>other</em> than send the email, you might need to move the cursor elsewhere. Some of these are clear buttons (like 'Save Draft'), but targets can also be textboxes, links, or any other interactive elements.</p>
+          <p>One of the most common (and difficult) tasks in design is deciding how to balance different potential targets in a confined space. You'll almost always have multiple competing tasks that you want to help users achieve, and prioritizing them can be incredibly tricky.</p>
+          <p>One of the main benefits of Fitts' Law is that it gives designers an <em>objective</em> way to do just that. Rather than guessing easy one target will be relative to another, they can measure the difficulty <em>precisely</em>.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepDistance" id="fittsStepDistance">
+        <h3 class="fittsHeading" data-color="distance">Distance (to the Target)</h3>
+        <div class="sectionBody">
+          <p>There are two aspects of the <span class="fittsColorCoded" data-color="target">Target</span> that matter when you want to apply Fitts' Law. The first is the <span class="fittsColorCoded" data-color="distance">Distance</span> to the target:</p>
+          <div id="fittsEquationDistance"></div>
+          <p>Specifically, this refers to how far the initial position is from the nearest edge of the target.</p>
+          <p>The <em>units</em> to the distance doesn't actually matter here. You could use inches, or meters, or furlongs and the calculation will work just as well. Since this particular example is on a computer screen, we'll use pixels for measurement.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepWidth" id="fittsStepWidth">
+        <h3 class="fittsHeading" data-color="width">Width (of the Target)</h3>
+        <div class="sectionBody">
+          <p>The other measurement that you'll need is the  <span class="fittsColorCoded" data-color="width">Width</span> of the target.</p>
+          <div id="fittsEquationWidth"></div>
+          <p>The word '<em>width</em>' might be a little bit confusing. Normally, you'd think of things like buttons having only a single, unchanging width. But when you're dealing with Fitts' Law, the measured <span class="fittsColorCoded" data-color="width">Width</span> actually depends on where the pointer starts.</p>
+          <p>That's because the <span class="fittsColorCoded" data-color="width">Width</span> is actually a measure of how large the target is compared to a straight line starting at the <span class="fittsColorCoded" data-color="pointer">initial pointer position</span>.</p>
+        </div>
+      </div>
+
+
+      <div class="step" data-scroll-step="fittsStepRatio" id="fittsStepRatio">
+        <h3  class="fittsHeading" data-color="ratio">Distance : Width Ratio</h3>
+        <div class="sectionBody">
+          <p>If you look back at the equation for Fitts' Law, you'll see that requires you to get the <span class="fittsColorCoded" data-color="ratio">Ratio</span> of the <span class="fittsColorCoded" data-color="distance">Distance</span> to the <span class="fittsColorCoded" data-color="width">Width</span>:</p>
+          <div id="fittsEquationRatio"></div>
+          <p>This is why the measurement units don't matter. And it's also why the <span class="fittsColorCoded" data-color="indexOfDifficulty">Index of Difficulty</span> is just a number. Division cancels out the units.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepBinaryLogarithm" id="fittsStepBinaryLogarithm">
+        <h3 class="fittsHeading" data-color="logarithm">The Binary Logarithm</h3>
+        <div class="sectionBody">
+          <p>Even though we've been talking about Fitts' Law as an <em>equation</em>, there hasn't been anything too <em>math-y</em> about it yet. Fortunately, the only part of Fitts' Law that is a little bit more advanced than just measuring distance is the <span class="fittsColorCoded" data-color="logarithm">Binary Logarithm</span>, written as <span class="fittsColorCoded" data-color="logarithm">log<sub>2</sub></span>:</p>
+          <div id="fittsEquationLogarithm"></div>
+          <p>In case it's been a while since you took Algebra I, the Binary Logarithm is a pretty simple math function. Like other functions, it takes in an <strong>input value</strong>, and produces an <strong>output</strong>. In most schools, you'd see it visualized like the chart to the right.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepBinaryLogarithmNumberLine" id="fittsStepBinaryLogarithmNumberLine">
+        <div class="sectionBody">
+          <p>You might find it a little bit easier to think of the <span class="fittsColorCoded" data-color="logarithm">binary logarithm</span> as two number lines, with <strong>input values</strong> on top, and <strong>outputs</strong> on the bottom.</p>
+          <p>Looking at it this way, one obvious thing to notice is that the <strong>output</strong> is <em>always</em> going to be smaller than the <strong>input</strong>. (That's why all of the lines slant to the left).</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepBinaryLogarithmNegative" id="fittsStepBinaryLogarithmNegative">
+        <div class="sectionBody">
+          <p>Taking a look at the <span class="fittsColorCoded" data-color="logarithm">binary logarithm</span> helps explain where that <strong>'+1'</strong> in Fitts' Law comes from. If you feed the Binary Logarithm an input value of less than one, the results are going to be <em>negative</em>.</p>
+          <div id="fittsEquationPlusOne"></div>
+          <p>If you're trying to measure how <em>difficult</em> something is, that doesn't really make any sense. What would it mean for something to have '-2.3 difficulty' even mean? How could you compare it to something with a 2.3 difficulty?.</p>
+          <p>Adding <strong>+1</strong> to the equation just ensures that the results will make sense.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepBinaryLogarithmNumberLineDeltas" id="fittsStepBinaryLogarithmNumberLineDeltas">
+        <div class="sectionBody">
+          <p>One final thing to note about the <span class="fittsColorCoded" data-color="logarithm">binary logarithm</span> is that it is <strong>nonlinear</strong>. In simple terms, this means that small changes to the <strong>input</strong> have a much larger effect on the <strong>output</strong> when you're closer to zero.</p>
+          <p>For Fitts' Law, this means that increasing the Width of a target will have a much larger effect on closer targets than those farther away.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepFullEquation" id="fittsStepFullEquation">
+        <h3 class="fittsHeading" data-color="indexOfDifficulty">Full Equation</h3>
+        <div class="sectionBody">
+          <p>Now that you know about each of the individual components of Fitts' Law, let's go back to our example of pressing 'Send' in an email app. Try using your cursor to check out how the entire equation plays out.</p>
+          <div id="fittsFullEquation"></div>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepHeatmap" id="fittsStepHeatmap">
+        <div class="sectionBody">
+
+          <p>One last way to think about Fitts' Law for this scenario is to think about what the <span class="fittsColorCoded" data-color="indexOfDifficulty">Index of Difficulty</span> looks like from <em>every</em> possible starting position. Here, we've color-coded every pixel in the window to correspond to the Index of Difficulty at that point.</p>
+
+          <p>Here, darker shades of orange correspond to a higher Index of Difficulty. If you look closely, you'll notice streaks of white emanting from each corner of the send button. These correspond to the regions where the <span class="fittsColorCoded" data-color="width">Width</span> is highest, because the axis of motion travels across the diagonal length of the button.</p>
+
+          <p>At this point, you may be wondering <em>why</em> Fitts' Law follows the <span class="fittsColorCoded" data-color="logarithm">binary logarithm</span>. Why can't you just look directly at the <span class="fittsColorCoded" data-color="distance">Distance</span> / <span class="fittsColorCoded" data-color="width">Width</span> <span class="fittsColorCoded" data-color="ratio">Ratio</span>? Why flatten the numbers out?</p>
+
+          <p>There's an answer to those questions that goes back to academic fads, information theory, and the history of science. But the better answer is that using the <span class="fittsColorCoded" data-color="logarithm">binary logarithm</span> <em>works</em>.</p>
+
+          <p>Researchers test out how long it takes users to point to targets in labs all the time. They've been doing it since at least the '50s, when Paul Fitts discovered the law that bears his name.</p>
+
+          <p>And time and again, when they collect enough data, the pattern of the <span class="fittsColorCoded" data-color="logarithm">binary logarithm</span> accurately predicts difficulty. It just <em>works</em>.</p>
+
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepImplicationsDesign" id="fittsStepImplicationsDesign">
+        <h2>Why This All Matters</h2>
+        <div class="sectionBody">
+          <p>If Fitts' Law <em>just</em> told us that bigger and closer targets are easier to hit, it might not be worth dedicating the time to write or think about it. But as we've already seen, Fitts' Law is <em>predictive</em>: it doesn't just tell you <em>that</em> some targets are easier than others, it tells you <em>how much</em> easier some targets are.</p>
+
+          <p>That alone turns out to be hugely important. By doing actual lab tests, researchers can easily measure how much <em>time</em> it takes users (on average) to hit targets with a particular Index of Difficulty using a huge variety of pointing devices.</p>
+
+          <p>Over time, this allowed organizations to build better tools &ndash; both pointing devices and interfaces &ndash; based on <em>empirical knowledge</em>, not just gut feeling.</p>
+
+          <p>Personally, I think that's interesting and worthwhile. But the really interesting thing about Fitts' Law is that when you follow it to its logical conclusions, you end up with some really surprising tricks for developing things that are really easy for humans to use.</p>
+
+          <p>This idea boils down to two basic strategies:</p>
+
+          <ul>
+            <li>First, you can try to make your target widths as huge as possible</li>
+            <li>Or you can try to minimize the distance between users and targets using some subtle design decisions</li>
+          </ul>
+
+          <p>Let's check out some real-world examples of this.</p>
+
+          <p></p>
+
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepLaptopIntro" id="fittsStepLaptopIntro">
+        <div class="sectionBody">
+          <h3 class="fittsHeading" data-color="width">Maximizing the Target Width</h3>
+          <p>One of the clear takeaways from Fitts' Law is that the <span class="fittsColorCoded" data-color="indexOfDifficulty">Index of Difficulty</span> is <em>inversely proportional</em> to the target <span class="fittsColorCoded" data-color="width">Width</span>. If you make targets larger and closer to the user, they'll be easier to get to. That much is obvious, even if the precise relationship is a little surprising.</p>
+          <p>So if <em>you</em> were designing the interface for email, and you knew that your users would want to hit 'Send' a lot, you might want to reconsider. Where you placed the button. Maybe it'd be better to put it right below the textbox.</p>
+          <p>Or maybe you'd want to make it bigger.</p>
+          <p>But at some point, you'd run out of space. The button would get so big that it would crowd out everything else on the screen. So, at least in this one example, you're limited in how easy you can make things for the user.</p>
+          <p>But there are some peculiar situations where that <em>isn't</em> the case. Sometimes, you can make targets <em>infinitely</em> large. Or at least, effectively infinitely <em>easy</em> for users to access.</p>
+          <p>To see how, you'll need to think about the real-world context of our example.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepImplicationsMenuBar" id="fittsStepImplicationsMenuBar">
+        <div class="sectionBody">
+
+
+          <p>The email application runs in a <strong>browser</strong>, which runs in an <strong>operating system</strong>, which in turn runs on some kind of a <strong>display</strong>.</p>
+
+          <p>And displays aren't infinite. They have <strong>edges</strong>.</p>
+
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepLaptopPointing" id="fittsStepLaptopPointing">
+        <div class="sectionBody">
+          <p>Think about what happens when you, as a user, try to to move your cursor beyond the edges of a screen. No matter how far you move your mouse (or whatever input device you're using), the cursor doesn't continue. It doesn't loop back around.</p>
+          <p>It just <em>stops</em> at the edges. You can't overshoot the bottom of the screen.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepLaptopTargets" id="fittsStepLaptopTargets">
+        <div class="sectionBody">
+          <p>This has some strange effects for <span class="fittsColorCoded" data-color="target">Targets</span> that touch a corner of the screen, like the ones highlighted here.</p>
+          <p>Because you can't <em>overshoot</em> these targets, they might as well continue on forever. Moving the cursor as fast as you can <em>past</em> the edge is the same as moving it <em>to</em> the edge.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepLaptopInteractive" id="fittsStepLaptopInteractive">
+        <div class="sectionBody">
+          <p>How can you calculate Fitts' Law for something that extends out forever? You need to extend the <span class="fittsColorCoded" data-color="width">Width</span> well beyond the actual, physical target.</p>
+          <p>Try playing around with the example to the right. No matter where you place the <span class="fittsColorCoded" data-color="pointer">initial starting point</span>, the <span class="fittsColorCoded" data-color="width">Width</span> is going to be huge (probably so big that you can't even see the whole line).</p>
+          <p>But the <span class="fittsColorCoded" data-color="distance">Distance</span> is limited by the height of the screen. So the <span class="fittsColorCoded" data-color="ratio">Ratio</span>, and therefore the <span class="fittsColorCoded" data-color="indexOfDifficulty">Index of Difficulty</span>, is going to be tiny.</p>
+          <p>It's super, <em>super</em> easy to move the cursor to hit this target. So easy, that these targets have a special name: <strong>magic pixels</strong>.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepLaptopTaskbar" id="fittsStepLaptopTaskbar">
+        <div class="sectionBody">
+          <p>Clever interface designers are well-aware of Magic Pixels, and use them to help improve the user experience. In current versions of macOS, for example, moving the cursor to anywhere on the bottom of the screen brings up a dock bar, which makes it easy to switch between applications.</p>
+          <p>For the same reason, Windows Operating Systems have had a Start Menu / Taskbar locked to the bottom of the screen. In both cases, these are <em>the most important things a user can do</em>. So they deserve a special, <em>magical</em> spot.</p>
+        </div>
+      </div>
+
+
+
+    <div class="step" data-scroll-step="fittsStepPhoneIntro" id="fittsStepPhoneIntro">
+      <h3 class="fittsHeading" data-color="design">Phones</h3>
+      <div class="sectionBody">
+        <p>Magic Pixels don't just show up in desktop environments. They are also key to good usability design for touch-based devices like phones and tablets.</p>
+        <p>Just like in a desktop, targets on the edges of a phone are effectively infinitely large.</p>
+
+      </div>
+    </div>
+
+    <div class="step" data-scroll-step="fittsStepPhoneMenuBar" id="fittsStepPhoneMenuBar">
+      <div class="sectionBody">
+        <p>And this explains why gestures like swiping <em>from the bottom</em> for important actions are so effective. On most modern phones, swiping <em>from below</em> the bottom of the screen will trigger a special action, like opening up a control panel.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scroll-step="fittsStepPhoneBrowsing" id="fittsStepPhoneBrowsing">
+      <div class="sectionBody">
+        <p><span class="fittsColorCoded" data-color="target">Targets</span> touching the left- or right-hand side of the screen are usually used for things like navigating histories. In most mobile browsers, these let users easily go Back and Forward.</p></p>
+      </div>
+    </div>
+
+
+    <div class="step" data-scroll-step="fittsPhoneScroll" id="fittsPhoneScroll">
+      <div class="sectionBody">
+        <p>Fitts' Law influenced other aspects of phone design, as well. <strong>Scrolling</strong> on a cursor-based system is simple enough. You can use gestures on a touchpad, a mouse scroll wheel, or an actual scroll bar on the side of a screen. But none of those would work on touchscreens.</p>
+        <p>Two-finger gestures would be awkward. Scroll wheels don't exist on your thumb. And given the small physical screen size, the <span class="fittsColorCoded" data-color="indexOfDifficulty">Index of Difficulty</span> for a narrow scroll bar would be incredibly frustrating.</p>
+        <p>So with Fitts' Law in mind, designers have tried to maximize the <span class="fittsColorCoded" data-color="width">Width</span> of the scroll target. Quite literally, in fact: the target for scrolling on phones is usually <em>the entire screen</em> itself!</p>
+      </div>
+    </div>
+
+    <div class="step" data-scroll-step="fittsPhoneResolution" id="fittsPhoneResolution">
+      <div class="sectionBody">
+        <p>All of this is to reinforce the idea that Fitts' Law tells us that the nature of the <span class="fittsColorCoded" data-color="pointer">pointing device</span> itself is incredibly important. As a designer, you <em>must</em> take <em>how</em> users are pointing into account. With touchscreens, that device is the users' thumb (or fingers).</p>
+        <p>And while things makes things more natural for most users, it constrains design. Our thumbs don't have nearly the <em>resolution</em> of a cursor &ndash; it's much harder to point to specific pixels on a screen. So things like buttons have to be relatively <em>larger</em> than they would otherwise be.</p>
+      </div>
+    </div>
+
+      <div class="step" data-scroll-step="fittsStepRemote" id="fittsStepRemote">
+        <h3 class="fittsHeading" data-color="design">TV Remotes</h3>
+        <div class="sectionBody">
+          <p>Even though we've been talking about digital interfaces so far, Fitts' Law was originally created computer graphics even existed. It isn't limited to interactive displays, and it's just as useful for designing physical controls, like my TV remote.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepRemoteTargets" id="fittsStepRemoteTargets">
+        <div class="sectionBody">
+          <p>My remote has a lot of functions. There are buttons to turn the TV on and off, switch inputs, change channels and volume, etc.</p>
+          <p>Just by <em>looking</em> at the remote, you can tell that some buttons are more important than others. Towards the top of the remote, there's a set of buttons for <strong>navigating menus</strong>. And towards the middle, there's a set for controlling the <strong>DVR Playback</strong>.</p>
+        </div>
+    </div>
+
+      <div class="step" data-scroll-step="fittsStepRemoteHeatmaps" id="fittsStepRemoteHeatmaps">
+          <div class="sectionBody">
+            <p>Both sets of buttons have the same size, so the <span class="fittsColorCoded" data-color="indexOfDifficulty">Index of Difficulty</span> for pointing at either will boil down to the users' <span class="fittsColorCoded" data-color="pointer">Initial Pointer Position</span>. (In this case, the pointer is their thumb, not a cursor).</p>
+
+            <p>If you were to na&iuml;vely apply Fitts' Law, you might be tempted to assume that it'll be easier to reach the DVR controls. After all, they're located right in the middle of the remote, which should minimize the average <span class="fittsColorCoded" data-color="distance">Distance</span> to those buttons.</p>
+          </div>
+      </div>
+
+
+      <div class="step" data-scroll-step="fittsStepRemoteSideView" id="fittsStepRemoteSideView">
+        <div class="sectionBody">
+          <p>But the physical construction of the remote complicates things a bit. The remote isn't just an abstract interface on a screen. It's a real, three-dimensional, <em>thing</em>.</p>
+          <p>And it's specifically designed to be held by the human hand. And in a very specific way.</p>
+        </div>
+      </div>
+
+      <div class="step" data-scroll-step="fittsStepRemoteWithHand" id="fittsStepRemoteWithHand">
+        <div class="sectionBody">
+          <p>The curve of the back of the remote is an <em>affordance</em>. It subtly &ndash; even subconsciously &ndash; encourages users to hold it in a specific way. And when they do, their thumbs just naturally land on a specific position: resting on top of the Menu controls.</p>
+
+          <p>In practical terms, this means that a vast majority of the time, the <span class="fittsColorCoded" data-color="indexOfDifficulty">Index of Difficulty</span> for the Menu Controls is <em>exactly zero</em>.</p>
+
+          <p>Clearly, the designers of this remote intended the Menu Buttons to be the primary interface to the TV. But the larger point here is one of <strong>ergonomics</strong>.</p>
+
+          <p>The physical construction of devices, especially how the can &ndash; and <em>can't</em> &ndash; be used by humans matters a lot for design. It's intrinsically tied to Fitts' Law, and the interplay between the two has major effects on how easy things are to use.</p>
+
+
+        </div>
+      </div>
+
+      <div style="margin-left:2em; margin-top:2em;">
+        <h2 style="margin-bottom:0.25em">Sources and Further Reading</h2>
+        <ul>
+          <li>Paul Fitts' introduced his eponymous law in the 1954 article <em>The Information Carrying Capacity of the Human Motor System in Controlling the Amplitude of Movement</em> in the <em>Journal of Experimental Psychology</em>. You can find it online <a href="http://www2.psychology.uiowa.edu/faculty/mordkoff/InfoProc/pdfs/Fitts%201954.pdf" target="_new">here</a>.</li>
+          <li>The Interaction Design Foundation's Glossary of Human Computer Interaction has a good overview of Fitts' Law <a href="https://www.interaction-design.org/literature/book/the-glossary-of-human-computer-interaction/fitts-s-law" target="_new">here</a>.</li>
+          <li>As with everything in life, the <a href="https://en.wikipedia.org/wiki/Fitts%27s_law" target="_new">Wikipedia page</a> for Fitts' Law provides a decent overview on the topic.</li>
+          <li>The general concept behind this essay was hugely influenced by Bret Victor's <a href="http://worrydream.com/ExplorableExplanations/" target="_new">Explorable Explanations</a>. If you found this even remotely interesting or helpful, you absolutely <em>must</em> read everything he has written..</li>
+        </ul>
+      </div>
+
+      <div style="min-height:20vh"></div>
+
+    </div>
+
+    <div id="interactiveContainer">
+        <div id="fittsInteractive"></div>
+      </div>
+    </div>
+    <script>
+
+      (() => {
+        let interactive,
+          scroller;
+
+        interactive = new FittsInteractive();
+
+        scroller = explorableScroll(interactive);
+
+      })();
+
+      let colors = fittsColors();
+
+      d3.selectAll(".fittsColorCoded")
+        .each(function() {
+          let backgroundColor,
+            color,
+            colorKey;
+
+          colorKey = d3.select(this)
+            .attr("data-color");
+
+          if(colorKey == "target") {
+            color = "black";
+            backgroundColor = colors.target;
+          } else {
+            backgroundColor = "rgba(0,0,0,0)";
+            color = colors[colorKey]
+          }
+
+
+          d3.select(this)
+            .style("font-weight","bold")
+            .style("color",color)
+            .style("background-color",backgroundColor);
+        });
+
+      d3.selectAll(".fittsHeading")
+        .each(function() {
+          let colorKey;
+
+          colorKey = d3.select(this)
+            .attr("data-color");
+
+          d3.select(this)
+            .style("padding","0.25em")
+            .style("background-color",fittsColors()[colorKey]);
+        });
+
+
+
+
+    </script>
+  </body>
+</html>
